@@ -1,10 +1,16 @@
+import { highlightCode } from "../utils/codeHighligther.js"
+
 const tabHolder = document.getElementById("nav-bar")
 if (!tabHolder) throw new Error("tab holder not found")
+    
+const contentHolder = document.getElementById("content")
+if (!contentHolder) throw new Error("content holder not found")
 
 class Levels{
     constructor(name, parent, content){
         this.name = name;
         this.content = content;
+        this.linesCount = this.content.split('\n').length + 2;
         this.parent = parent;
 
         this.isOpen = false;
@@ -13,21 +19,57 @@ class Levels{
         this.tabElement = null;
     }
 
+    async loadContent(){
+        const highlightedLines = await highlightCode(this.content, 'python');
+
+        contentHolder.innerHTML = highlightedLines
+            .map((line, index) => {
+                // 'index' starts at 0, so we add 1 for display
+                const lineNumber = index + 1; 
+
+                if(lineNumber == 1){
+                    return `<div class="code-line selected" data-line="${lineNumber}">${line || ' '}</div>`;
+                }
+                
+                return `<div class="code-line" data-line="${lineNumber}">${line || ' '}</div>`;
+            })
+            .join('');
+    }
+
     onTreeItemClick(e){
         // De-select all others
         tabHolder.querySelectorAll(".selected").forEach(i => i.classList.remove('selected'));
+        this.loadContent();
         
         if(this.isOpen) {
             this.tabElement.classList.add("selected")
             return
         }
 
-
         this.createTabItem();
         this.isOpen = true;
     }
 
+    onTabItemClick(e){
+        // De-select all others
+        tabHolder.querySelectorAll(".selected").forEach(i => i.classList.remove('selected'));
+
+        this.tabElement.classList.add("selected")
+        this.loadContent();
+    }
+
     closeTab(e){
+        // If closing the opened tab
+        if(e.target.classList.contains("selected")){
+            // And has any other tab open, select the closest sibling
+            let closestSibling = e.target.nextElementSibling || e.target.previousElementSibling;
+            if(closestSibling){
+                closestSibling._levelInstance.onTabItemClick();
+            } else {
+                contentHolder.innerHTML = ""
+            }
+        }
+
         e.target.parentNode.removeChild(e.target)
         this.isOpen = false;
     }
@@ -47,22 +89,239 @@ class Levels{
         this.tabElement = document.createElement("div-tab")
         this.tabElement.setAttribute("fileName", this.name)
         this.tabElement.classList.add("selected")
+        this.tabElement._levelInstance = this;
 
         this.tabElement.addEventListener('tab-close', (e) => {
             this.closeTab(e);
         });
+        this.tabElement.addEventListener('click', (e)=>{
+            this.onTabItemClick(e);
+        })
 
         tabHolder.appendChild(this.tabElement);
     }
 }
 
-new Levels(
-    "variables.py", 
-    document.getElementById("1-1"),
-    "teste"
-)
-new Levels(
-    "operators.py", 
-    document.getElementById("1-1"),
-    "teste"
-)
+async function startLevel() {
+    new Levels(
+        "variables.py", 
+        document.getElementById("1-1"),
+        `# --- BASIC DATA TYPES ---
+name = "Alex"           # String
+age = 25                # Integer
+score = 88.5            # Float
+is_active = True        # Boolean
+
+# --- STRING OPERATIONS ---
+greeting = "Hello " + name
+print(greeting)
+
+# --- MATH AND UPDATES ---
+age = age + 1           # Incrementing
+health = 100
+damage = 20
+current_health = health - damage
+
+# --- LISTS (GROUPING VARIABLES) ---
+inventory = ["sword", "shield", "map"]
+item_count = len(inventory)
+
+# --- FORMATTING OUTPUT ---
+print(f"Status: {name}")
+print(f"Level: {age}")
+print(f"Health: {current_health}")
+print(f"Items: {item_count}")
+
+# --- TYPE DYNAMICS ---
+# Variables can be redefined with different types
+data = 10
+print(data)
+
+data = "Now I am a string"
+print(data)
+
+# --- CONSTANTS ---
+# Use uppercase for values that shouldn't change
+PI = 3.14159
+MAX_CONNECTIONS = 5
+
+# --- CALCULATIONS ---
+radius = 5
+area = PI * (radius ** 2)
+print(f"Circle Area: {area}")
+
+# --- LOGIC CHECK ---
+can_enter = is_active and (age > 18)
+print(f"Access granted: {can_enter}")
+
+# --- NULL VALUES ---
+# Use None to represent 'nothing'
+player_target = None
+# --- BASIC DATA TYPES ---
+name = "Alex"           # String
+age = 25                # Integer
+score = 88.5            # Float
+is_active = True        # Boolean
+
+# --- STRING OPERATIONS ---
+greeting = "Hello " + name
+print(greeting)
+
+# --- MATH AND UPDATES ---
+age = age + 1           # Incrementing
+health = 100
+damage = 20
+current_health = health - damage
+
+# --- LISTS (GROUPING VARIABLES) ---
+inventory = ["sword", "shield", "map"]
+item_count = len(inventory)
+
+# --- FORMATTING OUTPUT ---
+print(f"Status: {name}")
+print(f"Level: {age}")
+print(f"Health: {current_health}")
+print(f"Items: {item_count}")
+
+# --- TYPE DYNAMICS ---
+# Variables can be redefined with different types
+data = 10
+print(data)
+
+data = "Now I am a string"
+print(data)
+
+# --- CONSTANTS ---
+# Use uppercase for values that shouldn't change
+PI = 3.14159
+MAX_CONNECTIONS = 5
+
+# --- CALCULATIONS ---
+radius = 5
+area = PI * (radius ** 2)
+print(f"Circle Area: {area}")
+
+# --- LOGIC CHECK ---
+can_enter = is_active and (age > 18)
+print(f"Access granted: {can_enter}")
+
+# --- NULL VALUES ---
+# Use None to represent 'nothing'
+player_target = None
+# --- BASIC DATA TYPES ---
+name = "Alex"           # String
+age = 25                # Integer
+score = 88.5            # Float
+is_active = True        # Boolean
+
+# --- STRING OPERATIONS ---
+greeting = "Hello " + name
+print(greeting)
+
+# --- MATH AND UPDATES ---
+age = age + 1           # Incrementing
+health = 100
+damage = 20
+current_health = health - damage
+
+# --- LISTS (GROUPING VARIABLES) ---
+inventory = ["sword", "shield", "map"]
+item_count = len(inventory)
+
+# --- FORMATTING OUTPUT ---
+print(f"Status: {name}")
+print(f"Level: {age}")
+print(f"Health: {current_health}")
+print(f"Items: {item_count}")
+
+# --- TYPE DYNAMICS ---
+# Variables can be redefined with different types
+data = 10
+print(data)
+
+data = "Now I am a string"
+print(data)
+
+# --- CONSTANTS ---
+# Use uppercase for values that shouldn't change
+PI = 3.14159
+MAX_CONNECTIONS = 5
+
+# --- CALCULATIONS ---
+radius = 5
+area = PI * (radius ** 2)
+print(f"Circle Area: {area}")
+
+# --- LOGIC CHECK ---
+can_enter = is_active and (age > 18)
+print(f"Access granted: {can_enter}")
+
+# --- NULL VALUES ---
+# Use None to represent 'nothing'
+player_target = None
+# --- BASIC DATA TYPES ---
+name = "Alex"           # String
+age = 25                # Integer
+score = 88.5            # Float
+is_active = True        # Boolean
+
+# --- STRING OPERATIONS ---
+greeting = "Hello " + name
+print(greeting)
+
+# --- MATH AND UPDATES ---
+age = age + 1           # Incrementing
+health = 100
+damage = 20
+current_health = health - damage
+
+# --- LISTS (GROUPING VARIABLES) ---
+inventory = ["sword", "shield", "map"]
+item_count = len(inventory)
+
+# --- FORMATTING OUTPUT ---
+print(f"Status: {name}")
+print(f"Level: {age}")
+print(f"Health: {current_health}")
+print(f"Items: {item_count}")
+
+# --- TYPE DYNAMICS ---
+# Variables can be redefined with different types
+data = 10
+print(data)
+
+data = "Now I am a string"
+print(data)
+
+# --- CONSTANTS ---
+# Use uppercase for values that shouldn't change
+PI = 3.14159
+MAX_CONNECTIONS = 5
+
+# --- CALCULATIONS ---
+radius = 5
+area = PI * (radius ** 2)
+print(f"Circle Area: {area}")
+
+# --- LOGIC CHECK ---
+can_enter = is_active and (age > 18)
+print(f"Access granted: {can_enter}")
+
+# --- NULL VALUES ---
+# Use None to represent 'nothing'
+player_target = None`);
+
+    new Levels(
+        "operators.py", 
+        document.getElementById("1-1"),
+        "teste2"
+    )
+
+    new Levels(
+        "index.html", 
+        document.getElementById("1-2"),
+        "teste3"
+    )
+}
+
+startLevel();

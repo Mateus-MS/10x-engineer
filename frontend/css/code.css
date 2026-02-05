@@ -1,0 +1,87 @@
+.content{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+
+    display: grid;
+    grid-template-areas: 
+        'nav-bar'
+        'code';
+    grid-template-rows: 40px 1fr;
+}
+
+.content > #nav-bar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: sticky;
+    top: 0;
+    grid-area: nav-bar;
+    background-color: #1D1D1D;
+
+    z-index: 5;
+}
+
+.content.code > #content {
+    padding: 1em 0;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    background-color: #282828;
+    color: #858585 !important;
+    user-select: none; 
+    
+    /* 1. Initialize the counter */
+    counter-reset: line; 
+}
+
+.content.code > #content > .code-line {
+    --line-counter-width: 7%;
+    text-align: start;
+    
+    padding-top: .2em;
+    padding-bottom: .2em;
+    margin-left: var(--line-counter-width);
+
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.content.code > #content > .code-line.selected {
+    border: 2px solid #333333bb;
+}
+
+.content.code > #content > .code-line.selected::before {
+    color: white;
+}
+
+.content.code > #content > .code-line::before {
+    --padding: 1em;
+    color: #6e757f;
+    position: absolute;
+    top: 0;
+    left: calc(var(--line-counter-width) * -1);
+    width: calc(var(--line-counter-width) - var(--padding));
+    height: 100%;
+    line-height: normal;
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end;
+    content: attr(data-line);
+}
+
+.content.code > #code {
+    font-weight: 100;
+    line-height: 1.5em;
+    white-space: pre;
+}
+
+.content.code > #content{
+    width: 100%;
+    height: 100%;
+
+    display: block;
+    white-space: pre; /* This preserves spaces and newlines exactly */
+    font-family: 'JetBrains Mono', 'Courier New', monospace; /* Use monospaced fonts */
+    tab-size: 4; /* Tells the browser how wide a '\t' character should be */
+}

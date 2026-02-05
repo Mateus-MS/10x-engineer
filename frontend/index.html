@@ -7,6 +7,7 @@
     <base href="frontend/">
 
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/code.css">
     <link rel="stylesheet" href="css/side-menu/main.css">
 
     <!-- Custom elements -->
@@ -15,6 +16,12 @@
     <script src="src/components/collapsable/collapsable.js" type="module"></script>
 
     <script src="src/core/levels/levels.js" type="module" defer></script>
+
+    <!-- Thirdyparties -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </head>
 <body>
     <div id="container">
@@ -26,16 +33,17 @@
                     <div-collapsable title="hello-world">
                         <div-collapsable id="1-1" title="learning python">
                         </div-collapsable>
-                        <div-collapsable title="learning html">
+                        <div-collapsable id="1-2" title="learning html">
                         </div-collapsable>
                     </div-collapsable>
                 </side-menu>
             </div>
         </div>
         <div id="main">
-            <div id="nav-bar">
+            <div class="content code">
+                <div id="nav-bar"></div>
+                <div id="content"></div>
             </div>
-            <div id="content"></div>
         </div>
         <div id="agent"></div>
         <div id="cmd"></div>

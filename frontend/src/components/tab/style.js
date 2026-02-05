@@ -15,10 +15,19 @@ export const css = () => /* css */ `
     }
 
     :host(.selected) .tab{
-        border: none !important;
-        border-top: 2px solid #0078d4 !important;
+        border: 1px solid transparent !important;
         background-color: #282828 !important;
         color: white !important;
+
+        position: relative;
+    }
+    :host(.selected) .tab::after{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -1px;
+        width: calc(100% + 2px);
+        border-top: 2px solid #0078d4;
     }
 
     .tab:hover{
