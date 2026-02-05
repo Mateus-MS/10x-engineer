@@ -7,7 +7,7 @@
 
 @font-face {
     font-family: icons;
-    src: url("/fonts/icons.ttf");
+    src: url("../../../fonts/icons.ttf");
 }
 
 .icons{
@@ -25,12 +25,14 @@ body{
 
     display: grid;
 
-    grid-template: 
-        'side-menu code code code agent'
-        'side-menu code code code agent'
-        'side-menu code code code agent'
-        'side-menu code code code agent'
-        'side-menu cmd cmd cmd agent';
+    grid-template-columns: 20% 1fr 25%;
+
+    grid-template-areas: 
+        'side-menu code agent'
+        'side-menu code agent'
+        'side-menu code agent'
+        'side-menu code agent'
+        'side-menu cmd agent';
 }
 
 #code{

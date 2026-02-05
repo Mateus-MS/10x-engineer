@@ -1,16 +1,12 @@
+import { html } from './body.js';
+import { css } from './style.js';
+import { SideMenuIcon } from './icon/icon.js';
+
 const iconsContainer = document.getElementById("icons")
 if (!iconsContainer) throw new Error("Icons container not found")
 
 const sideMenuStyles = new CSSStyleSheet();
-sideMenuStyles.replaceSync(`
-    .title {
-        width: 100%;
-        margin-bottom: 1.5em;
-        color: rgb(177, 177, 177);
-        font-weight: 100;
-        font-size: 1.1em;
-    }
-`);
+sideMenuStyles.replaceSync(css());
 
 class SideMenu extends HTMLElement {
     constructor(){
@@ -44,11 +40,9 @@ class SideMenu extends HTMLElement {
     }
 
     render(){
-        this.shadowRoot.innerHTML = `
-            <h2 class="title">${this.titleValue}</h2>
-            <slot></slot>
-        `;
+        this.shadowRoot.innerHTML = html(this.titleValue);
     }
 }
 
+customElements.define('side-menu-icon', SideMenuIcon);
 customElements.define('side-menu', SideMenu);

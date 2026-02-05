@@ -4,20 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The 10x engineer</title>
+    <base href="frontend/screens/main/">
 
     <link rel="stylesheet" href="css/main.css">
 
     <link rel="stylesheet" href="css/side-menu/main.css">
-    <link rel="stylesheet" href="css/side-menu/icons.css">
-    <link rel="stylesheet" href="css/side-menu/menu.css">
-
-    <script src="js/ui/sideBar.js" defer></script>
 
     <!-- Custom elements -->
-    <script src="js/ui/elements/collapse.js" defer></script>
-
-    <script src="js/ui/elements/side-menu-icon.js" defer></script>
-    <script src="js/ui/elements/side-menu.js" defer></script>
+    <script src="../../components/side-menu/side-menu.js" type="module"></script>
+    <script src="../../components/collapsable/collapsable.js" type="module"></script>
 </head>
 <body>
     <div id="container">
@@ -27,11 +22,11 @@
             <div id="menus">
                 <side-menu icon="&#xE805;" title="Levels">
                     <div-collapsable title="hello-world">
-                        <div>askjdnjkasdnjkasdnjksajnkasdjnk</div>
+                        <div-collapsable title="teste">
+                            <div>askjdnjkasdnjkasdnjksajnkasdjnk</div>
+                        </div-collapsable>
                     </div-collapsable>
                 </side-menu>
-                <side-menu icon="&#xE804;" title="tests"></side-menu>
-                <side-menu icon="&#xF2BD;"></side-menu>
             </div>
         </div>
         <div id="code"></div>

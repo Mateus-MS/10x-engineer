@@ -1,5 +1,4 @@
-const iconStyles = new CSSStyleSheet();
-iconStyles.replaceSync(`
+export const css = () => /* css */ `
     :host {
         display: block;
         width: 100%;
@@ -64,50 +63,4 @@ iconStyles.replaceSync(`
         font-size: 1.5rem;
         font-style: normal;
     }
-`);
-
-class SideMenuIcon extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
-        // Attach the shared stylesheet
-        this.shadowRoot.adoptedStyleSheets = [iconStyles];
-
-        this.addEventListener("click", ()=>{
-            this.onclick()
-        })
-    }
-
-    static get observedAttributes() {
-        return ['icon', 'selected'];
-    }
-
-    attributeChangedCallback() {
-        this.render();
-    }
-
-    connectedCallback() {
-        this.render();
-    }
-
-    onclick(){
-        let allIcons = document.querySelectorAll("side-menu-icon")
-        
-        allIcons.forEach(i => i.removeAttribute('selected'));
-        this.setAttribute('selected', '');
-    }
-
-    render() {
-        const icon = this.getAttribute('icon') || '';
-        
-        this.shadowRoot.innerHTML = `
-            <button class="button" role="tab">
-                <div class="icon-wrapper">
-                    <span>${icon}</span>
-                </div>
-            </button>
-        `;
-    }
-}
-
-customElements.define('side-menu-icon', SideMenuIcon);
+`
