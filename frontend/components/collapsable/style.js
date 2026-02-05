@@ -1,15 +1,28 @@
 export const css = () => /* css */ `
+    :host {
+        display: block;
+        width: 100%;
+    }
     .header{
         display: flex;
         align-items: center;
         justify-content: center;
         
+        background-color: #1D1D1D;
         color: rgb(177, 177, 177);
         cursor: pointer;
         user-select: none;
         position: relative;
 
-        background-color: red;
+        /* 1. Reset the "staircase": pull the background back to the far left */
+        margin-left: calc(var(--deepeness) * -1.5em);
+        
+        /* 2. Re-apply the visual indentation to the icons/text only */ 
+        padding-left: calc(var(--deepeness) * 1.5em);
+    }
+
+    .header:hover{
+        background-color: rgb(82, 82, 82);
     }
     
     .title {
@@ -20,23 +33,23 @@ export const css = () => /* css */ `
     }
     
     .arrow{
-        /* I was trying to build a recursive tree where nested components used padding for indentation. 
-           This created a "staircase effect" that broke my full-width hover states. */
-        margin-left: calc(var(--deepeness) * 1.5em);
+        /* TEMP */
+        margin-left: 1.5em;
         font-family: 'icons';
         margin-right: .5em;
-        transform: rotate(0deg);
+        transform: rotate(-90deg);
     }
     :host(.opened) .arrow{
-        transform: rotate(90deg);
+        transform: rotate(0deg);
     }
     
-    :host(.opened) slot{
+    :host(.opened) slot {
         display: block;
     }
+
     slot {
-        display: block;
         display: none;
-        background-color: yellow;
+        cursor: pointer;
+        padding-left: 1.5em;
     }
 `;
