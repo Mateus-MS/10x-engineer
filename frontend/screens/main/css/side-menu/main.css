@@ -35,12 +35,12 @@
     font-size: 1.1rem;
     color: rgb(177, 177, 177);
     padding: .3em 0;
+    border: 1px solid transparent;
     /* TEMP */
     padding-left: 1.5em;
 
     display: flex;
     align-items: center;
-
     user-select: none;
 
     /* 1. Reset the "staircase": pull the background back to the far left */
@@ -48,6 +48,10 @@
     
     /* 2. Re-apply the visual indentation to the icons/text only */ 
     padding-left: calc((var(--deepeness) + 1) * 1.5em);
+}
+.file.selected{
+    border: 1px solid #0078d4 !important;
+    background: #04395e !important;
 }
 .file:hover{
     background-color: rgb(82, 82, 82);

@@ -7,6 +7,7 @@ export const css = () => /* css */ `
         display: flex;
         align-items: center;
         justify-content: center;
+        border: 1px solid transparent;
         
         background-color: #1D1D1D;
         color: rgb(177, 177, 177);
@@ -19,6 +20,11 @@ export const css = () => /* css */ `
         
         /* 2. Re-apply the visual indentation to the icons/text only */ 
         padding-left: calc(var(--deepeness) * 1.5em);
+    }
+
+    :host(.selected) .header{
+        border: 1px solid #0078d4 !important;
+        background: #04395e !important;
     }
 
     .header:hover{

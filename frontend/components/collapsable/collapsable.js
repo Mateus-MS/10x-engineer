@@ -13,9 +13,22 @@ class Collapse extends HTMLElement {
     }
 
     onclick(e){
+        if(e.target.classList.contains("file")){
+            document.getElementById("menus").querySelectorAll(".selected").forEach(i => i.classList.remove('selected'));
+            e.target.classList.add("selected") 
+            return
+        }
         if (e.target !== this) return;
         if (e) e.stopPropagation();
 
+        let headerPart = this.shadowRoot.querySelector(".header");
+        if(headerPart){
+            // Unselect all others
+            document.getElementById("menus").querySelectorAll(".selected").forEach(i => i.classList.remove('selected'));
+            this.classList.add("selected") 
+        } else {
+            console.log(e.target)
+        }
         this.classList.toggle("opened");
     }
 

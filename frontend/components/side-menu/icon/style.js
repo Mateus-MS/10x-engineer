@@ -50,7 +50,7 @@ export const css = () => /* css */ `
     }
 
     :host([selected]) .button::after {
-        border-left: 3px solid rgb(90, 90, 255);
+        border-left: 3px solid #0078d4;
     }
 
     :host([selected]) .icon-wrapper {
