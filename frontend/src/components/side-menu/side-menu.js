@@ -1,6 +1,7 @@
 import { html } from './body.js';
 import { css } from './style.js';
 import { SideMenuIcon } from './icon/icon.js';
+import { File } from './file/file.js';
 
 const iconsContainer = document.getElementById("icons")
 if (!iconsContainer) throw new Error("Icons container not found")
@@ -21,6 +22,11 @@ class SideMenu extends HTMLElement {
         this.titleValue = null;
     }
 
+    onclick(e){
+        document.getElementById("menus").querySelectorAll(".selected").forEach(i => i.classList.remove('selected'));
+        e.target.classList.add("selected") 
+    }
+
     connectedCallback(){
         const iconValue = this.getAttribute('icon')
         this.titleValue = this.getAttribute('title') || ""
@@ -31,6 +37,10 @@ class SideMenu extends HTMLElement {
         iconsContainer.appendChild(this.iconElement)
 
         this.render();
+
+        this.addEventListener("mousedown", (e)=>{
+            this.onclick(e);
+        })
     }
 
     disconnectedCallback(){
@@ -46,3 +56,5 @@ class SideMenu extends HTMLElement {
 
 customElements.define('side-menu-icon', SideMenuIcon);
 customElements.define('side-menu', SideMenu);
+
+customElements.define('div-file', File);

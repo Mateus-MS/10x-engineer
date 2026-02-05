@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The 10x engineer</title>
-    <base href="frontend/screens/main/">
+    <base href="frontend/">
 
     <link rel="stylesheet" href="css/main.css">
-
     <link rel="stylesheet" href="css/side-menu/main.css">
 
     <!-- Custom elements -->
-    <script src="../../components/side-menu/side-menu.js" type="module"></script>
-    <script src="../../components/collapsable/collapsable.js" type="module"></script>
+    <script src="src/components/tab/tab.js" type="module"></script>
+    <script src="src/components/side-menu/side-menu.js" type="module"></script>
+    <script src="src/components/collapsable/collapsable.js" type="module"></script>
+
+    <script src="src/core/levels/levels.js" type="module" defer></script>
 </head>
 <body>
     <div id="container">
@@ -22,19 +24,19 @@
             <div id="menus">
                 <side-menu icon="&#xE805;" title="Levels">
                     <div-collapsable title="hello-world">
-                        <div-collapsable title="learning python">
-                            <!-- TODO: <div-file fileName="variables.py" iconName="python"></div-file> -->
-                            <div class="file"> <img src="../../icons/materials/python.svg"> variables.py</div>
-                            <div class="file"> <img src="../../icons/materials/python.svg"> conditionals.py</div>
+                        <div-collapsable id="1-1" title="learning python">
                         </div-collapsable>
                         <div-collapsable title="learning html">
-                            <div class="file"> <img src="../../icons/materials/html.svg"> index.html</div>
                         </div-collapsable>
                     </div-collapsable>
                 </side-menu>
             </div>
         </div>
-        <div id="code"></div>
+        <div id="main">
+            <div id="nav-bar">
+            </div>
+            <div id="content"></div>
+        </div>
         <div id="agent"></div>
         <div id="cmd"></div>
     </div>

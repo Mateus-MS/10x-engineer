@@ -13,15 +13,7 @@ class Collapse extends HTMLElement {
     }
 
     onclick(e){
-        document.getElementById("menus").querySelectorAll(".selected").forEach(i => i.classList.remove('selected'));
-        if(e.target.classList.contains("file")){
-            e.target.classList.add("selected") 
-            return
-        }
         if (e.target !== this) return;
-        if (e) e.stopPropagation();
-
-        this.classList.add("selected") 
         this.classList.toggle("opened");
     }
 
