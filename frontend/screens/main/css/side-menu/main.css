@@ -52,6 +52,7 @@
 .file.selected{
     border: 1px solid #0078d4 !important;
     background: #04395e !important;
+    color: white !important;
 }
 .file:hover{
     background-color: rgb(82, 82, 82);

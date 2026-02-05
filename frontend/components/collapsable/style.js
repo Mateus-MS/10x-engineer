@@ -25,6 +25,7 @@ export const css = () => /* css */ `
     :host(.selected) .header{
         border: 1px solid #0078d4 !important;
         background: #04395e !important;
+        color: white !important;
     }
 
     .header:hover{
