@@ -1,4 +1,3 @@
-/* Container */
 #side-menu{
     width: 100%;
     grid-area: side-menu;
@@ -7,7 +6,6 @@
     display: flex;
 }
 
-/* First child */
 #icons{
     width: 18%;
     height: 100%;
@@ -17,15 +15,9 @@
     flex-direction: column;
 }
 
-/* Second child */
 #menus{
     width: 100%;
     height: 100%;
     overflow: auto;
-    box-sizing: border-box;
     flex-grow: 1;
-
-    flex-shrink: 1;      /* Allows it to shrink to fit the parent */
-    min-width: 0;        /* IMPORTANT: Overrides the 'auto' width based on text */
-    word-break: break-all; /* Forces the long string to wrap to the next line */
 }

@@ -21,6 +21,13 @@ export const css = () => /* css */ `
 
         position: relative;
     }
+    :host(.selected) .tab > button {
+        opacity: 1;
+        pointer-events: auto;
+        cursor: pointer;
+        color: white !important;
+    }
+
     :host(.selected) .tab::after{
         content: "";
         position: absolute;
