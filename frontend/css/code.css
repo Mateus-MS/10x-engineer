@@ -30,9 +30,6 @@
     color: #858585 !important;
     user-select: none; 
 
-    /* TO FIX: this is not working as intended
-    this should be making the scroll bar be over the div content
-    not creating a spacing for it self*/
     overflow: overlay;
 }
 
@@ -53,8 +50,6 @@
 }
 
 .content.code > #content > .code-line {
-    /* TODO: this varibale should be automatically increased with font-size
-        cus when the font get's bigger the side number also get bigger*/
     --line-counter-width: 8%;
     text-align: start;
     font-weight: 600;
@@ -67,30 +62,19 @@
     border: 2px solid transparent;
     font-size: 1.2em;
     font-family: monospace;
+
+    display: flex;
 }
 
-.content.code > #content > .code-line.reveal::after {
-    content: attr(data-text);   /* JS sets this */
-    position: absolute;
-    top: .2em;
-    left: 0;
-    pointer-events: none;
-    white-space: pre;
-
-    /* copy text layout */
-    font: inherit;
-    letter-spacing: inherit;
-    word-spacing: inherit;
-    line-height: inherit;
-
-    /* visual effect */
-    filter: grayscale(1) brightness(0.6);
-
-    /* show only B → C */
-    clip-path: inset(0 0 0 var(--progress-px, 0px));
+.content.code > #content > .code-line > .gray,
+.content.code > #content > .code-line > .gray span {
+    font-family: inherit;
+    font-size: inherit;
+    color: rgb(91, 91, 91) !important;
 }
 
-.content.code > #content > .code-line span {
+.content.code > #content > .code-line > .color,
+.content.code > #content > .code-line > .color span {
     font-family: inherit;
     font-size: inherit;
 }

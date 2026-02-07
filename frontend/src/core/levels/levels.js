@@ -21,13 +21,12 @@ class Levels{
 
     async loadContent(){
         const highlightedLines = await highlightCode(this.content, 'python');
-        let rawText = this.content.split("\n")
 
         contentHolder.innerHTML = highlightedLines
             .map((line, index) => {
                 const lineNumber = index + 1; 
 
-                return `<div class="code-line reveal ${lineNumber == 1 ? "selected" : ""}" data-line="${lineNumber}" data-text='${rawText[index]}'>${line || ' '}</div>`;
+                return `<div class="code-line ${lineNumber == 1 ? "selected" : ""}" data-line="${lineNumber}"><div class="color"></div><div class="gray">${line || ' '}</div></div>`;
             })
             .join('');
     }
@@ -172,11 +171,18 @@ startLevel();
 let lineIndex = 0;
 
 let charIndex = 0;
-let firstLetter = null;
 
 window.addEventListener("keydown", (e) => {
     let line = contentHolder.children[lineIndex];
+
+    let color = line.children[0]
+    let gray = line.children[1]
+
     let lineLength = line.innerText.length;
+
+    keepLineAbovePercentage(line.parentElement, line)
+
+    moveFirstChar(gray, color)
 
     if(charIndex >= lineLength){
         contentHolder.children[lineIndex].classList.remove("selected")
@@ -185,58 +191,107 @@ window.addEventListener("keydown", (e) => {
         contentHolder.children[lineIndex].classList.add("selected")
 
         charIndex = 0;
-        firstLetter = null;
         return
     }
-
-    if(firstLetter === null){
-        firstLetter = getCharPosition(line, 0);
-    }
-
-    let cursor = charIndex === 0 ? firstLetter : getCharPosition(line, charIndex);
-
-    let pixelOffset = cursor.x - firstLetter.x + cursor.w;
-
-    line.style.setProperty('--progress-px', `${pixelOffset}px`);
 
     charIndex += 1;
 });
 
-function getCharPosition(container, targetIndex) {
-    const range = document.createRange();
-    let currentPos = 0;
-    let found = false;
+function keepLineAbovePercentage(parent, child, percent = 0.8, smooth = true) {
+  const parentHeight = parent.clientHeight;
+  const childOffsetTop = child.offsetTop;
 
-    // We need to loop through all text nodes inside the div
-    const traverse = (node) => {
-        if (found) return;
+  // target position so child.top == 80% of parent height
+  const targetScrollTop = childOffsetTop - parentHeight * percent;
 
-        if (node.nodeType === Node.TEXT_NODE) {
-            const len = node.textContent.length;
-            if (currentPos + len > targetIndex) {
-                // The character is in THIS text node
-                range.setStart(node, targetIndex - currentPos);
-                range.setEnd(node, targetIndex - currentPos + 1);
-                found = true;
-            } else {
-                currentPos += len;
-            }
-        } else {
-            for (let child of node.childNodes) {
-                traverse(child);
-            }
+  parent.scrollTo({
+    top: Math.max(0, targetScrollTop),
+    behavior: smooth ? 'smooth' : 'auto'
+  });
+}
+
+function moveFirstChar(fromEl, toEl) {
+    function findFirstTextNode(node) {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent.length > 0) {
+            return node;
         }
-    };
-
-    traverse(container);
-
-    if (found) {
-        const rect = range.getBoundingClientRect();
-        return {
-            x: rect.right + window.scrollX,
-            y: rect.top + window.scrollY,
-            w: rect.width
-        };
+        for (let child of node.childNodes) {
+            const found = findFirstTextNode(child);
+            if (found) return found;
+        }
+        return null;
     }
-    return null; 
+
+    function sameElement(a, b) {
+        if (!a || !b) return false;
+        if (a.nodeType !== 1 || b.nodeType !== 1) return false;
+        if (a.tagName !== b.tagName) return false;
+        return a.className === b.className;
+    }
+
+    const textNode = findFirstTextNode(fromEl);
+    if (!textNode) return;
+
+    const char = textNode.textContent[0];
+    textNode.textContent = textNode.textContent.slice(1);
+
+    let current = textNode;
+    let chain = [];
+
+    while (current !== fromEl) {
+        if (current.nodeType === 1) chain.push(current);
+        current = current.parentNode;
+    }
+
+    chain = chain.reverse();
+
+    if (chain.length === 0) {
+        const last = toEl.lastChild;
+        if (last && last.nodeType === Node.TEXT_NODE) {
+            last.textContent += char;
+        } else {
+            toEl.appendChild(document.createTextNode(char));
+        }
+        return;
+    }
+
+    let parent = toEl;
+
+    const firstWrapper = chain[0];
+    const tailElement = toEl.lastElementChild;
+
+    let startIndex = 0;
+
+    const canMerge =
+        sameElement(tailElement, firstWrapper) &&
+        toEl.lastChild === tailElement;
+
+    if (canMerge) {
+        parent = tailElement;
+        startIndex = 1;
+    }
+
+    for (let i = startIndex; i < chain.length; i++) {
+        const clone = chain[i].cloneNode(false);
+        parent.appendChild(clone);
+        parent = clone;
+    }
+
+    const lastNode = parent.lastChild;
+    if (lastNode && lastNode.nodeType === Node.TEXT_NODE) {
+        lastNode.textContent += char;
+    } else {
+        parent.appendChild(document.createTextNode(char));
+    }
+
+    let n = textNode;
+    while (n && n !== fromEl) {
+        const p = n.parentNode;
+        if (n.nodeType === Node.TEXT_NODE && n.textContent === "") {
+            p.removeChild(n);
+        } else if (n.nodeType === 1 && n.childNodes.length === 0) {
+            p.removeChild(n);
+        }
+        n = p;
+    }
 }
