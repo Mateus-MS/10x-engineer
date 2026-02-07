@@ -21,12 +21,13 @@ class Levels{
 
     async loadContent(){
         const highlightedLines = await highlightCode(this.content, 'python');
+        let rawText = this.content.split("\n")
 
         contentHolder.innerHTML = highlightedLines
             .map((line, index) => {
                 const lineNumber = index + 1; 
 
-                return `<div class="code-line reveal ${lineNumber == 1 ? "selected" : ""}" data-line="${lineNumber}">${line || ' '}</div>`;
+                return `<div class="code-line reveal ${lineNumber == 1 ? "selected" : ""}" data-line="${lineNumber}" data-text='${rawText[index]}'>${line || ' '}</div>`;
             })
             .join('');
     }

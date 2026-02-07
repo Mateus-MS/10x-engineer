@@ -52,18 +52,6 @@
     background-color: rgba(145, 145, 145, 0.3);
 }
 
-.content.code > #content > .code-line.reveal {
-    background: linear-gradient(
-        to right, 
-        #3498db var(--progress-px, 0px), 
-        #444444 var(--progress-px, 0px)
-    );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
 .content.code > #content > .code-line {
     /* TODO: this varibale should be automatically increased with font-size
         cus when the font get's bigger the side number also get bigger*/
@@ -81,6 +69,27 @@
     font-family: monospace;
 }
 
+.content.code > #content > .code-line.reveal::after {
+    content: attr(data-text);   /* JS sets this */
+    position: absolute;
+    top: .2em;
+    left: 0;
+    pointer-events: none;
+    white-space: pre;
+
+    /* copy text layout */
+    font: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    line-height: inherit;
+
+    /* visual effect */
+    filter: grayscale(1) brightness(0.6);
+
+    /* show only B → C */
+    clip-path: inset(0 0 0 var(--progress-px, 0px));
+}
+
 .content.code > #content > .code-line span {
     font-family: inherit;
     font-size: inherit;
@@ -88,25 +97,6 @@
 
 .content.code > #content > .code-line.selected {
     border: 2px solid #333333bb;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-/* Cursor */
-.content.code > #content > .code-line.selected::after{
-    content: "";
-    display: block;
-    width: 2px;
-    height: 100%;
-    background-color: white;
-    position: absolute;
-    top: 0;
-    left: var(--progress-px, 0px);
-
-    animation: blink 1s step-end infinite;
 }
 
 .content.code > #content > .code-line.selected::before {
