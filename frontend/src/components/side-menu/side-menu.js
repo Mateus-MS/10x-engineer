@@ -33,7 +33,8 @@ class SideMenu extends HTMLElement {
 
         this.iconElement = document.createElement('side-menu-icon');
         this.iconElement.setAttribute("icon", iconValue)
-
+        this.iconElement.setAttribute(iconsContainer.children.length === 0 ? "selected" : "", "")
+        
         iconsContainer.appendChild(this.iconElement)
 
         this.render();

@@ -156,7 +156,7 @@ player_target = None`);
     new Levels(
         "operators.py", 
         document.getElementById("1-1"),
-        "teste2"
+        ""
     )
 
     new Levels(
