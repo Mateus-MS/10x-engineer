@@ -73,11 +73,33 @@
     color: rgb(91, 91, 91) !important;
 }
 
+.content.code > #content > .code-line > .color{
+    position: relative;
+}
 .content.code > #content > .code-line > .color,
 .content.code > #content > .code-line > .color span {
     font-family: inherit;
     font-size: inherit;
 }
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.content.code > #content > .code-line.selected > .color::after{
+    top: 0;
+    right: 0;
+    content: "";
+    width: 2px;
+    height: 1.2em;
+    display: block;
+    position: absolute;
+    background-color: white;
+
+    animation: blink 1s step-end infinite;
+}
+
 
 .content.code > #content > .code-line.selected {
     border: 2px solid #333333bb;
@@ -116,6 +138,6 @@
     height: 100%;
 
     display: block;
-    white-space: pre; /* This preserves spaces and newlines exactly */
-    tab-size: 4; /* Tells the browser how wide a '\t' character should be */
+    white-space: pre;
+    tab-size: 4;
 }
