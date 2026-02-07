@@ -1,4 +1,5 @@
 import { highlightCode } from "../utils/codeHighligther.js"
+// import { getRandom } from "../utils/random.js"
 
 const tabHolder = document.getElementById("nav-bar")
 if (!tabHolder) throw new Error("tab holder not found")
@@ -183,6 +184,12 @@ window.addEventListener("keydown", (e) => {
     keepLineAbovePercentage(line.parentElement, line)
 
     moveFirstChar(gray, color)
+    // if(!contentHolder.classList.contains('shake-effect') && getRandom(0, 3) === 0){
+    //     contentHolder.classList.add('shake-effect')
+    //     setTimeout(() => {
+    //         contentHolder.classList.remove('shake-effect');
+    //     }, 500);
+    // }
 
     if(charIndex >= lineLength){
         contentHolder.children[lineIndex].classList.remove("selected")
