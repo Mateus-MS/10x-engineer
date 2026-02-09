@@ -2,6 +2,7 @@ import { html } from './body.js';
 import { css } from './style.js';
 import { highlightCode } from '../../core/utils/codeHighligther.js';
 import { convertExtensionToName } from '../../core/utils/extensionToName.js';
+import { moveFirstChar } from '../../core/utils/moveFirstChar.js';
 
 const tabStyles = new CSSStyleSheet();
 tabStyles.replaceSync(css());
@@ -18,13 +19,70 @@ class Tab extends HTMLElement {
         this.attachShadow({mode: "open"})
 
         this.highlightedLines = null;
-        this.instanceContent = null;
         this.shadowRoot.adoptedStyleSheets = [tabStyles];
+        this.lineLengths = null;
 
         this._closeListeners = new Set();
 
-        this.charIndex = 0;
-        this.lineIndex = 0;
+        this._charCount = 0;
+
+        this.needUpdateIndexes = false;
+        this._charIndex = 0;
+        this._lineIndex = 0;
+    }
+
+    updateIndexes(){
+        let counter = this.charCount;
+
+        let lineCounter = 0;
+
+        for(let i = 0; i < this.lineLengths.length; i++){
+            if(counter >= this.lineLengths[i]){
+                lineCounter += 1
+                counter -= this.lineLengths[i]
+            } else {
+                break
+            }
+        }
+
+        // the char index is equal to what remain in counter
+        this._charIndex = counter;
+
+        // If the new lineIndex is different from the new one, update the selected line
+        if(this._lineIndex !== lineCounter){
+            contentHolder.children[this._lineIndex].classList.remove("selected")
+            contentHolder.children[lineCounter].classList.add("selected")
+        }
+        this._lineIndex = lineCounter;
+
+        this.needUpdateIndexes = false;
+    }
+
+    get charCount(){
+        return this._charCount
+    }
+
+    set charCount(x){
+        if (x !== this._charCount) {
+            this._charCount = x
+            this.needUpdateIndexes = true
+        }
+    }
+
+    get charIndex(){
+        if(this.needUpdateIndexes){
+            this.updateIndexes()
+        }
+
+        return this._charIndex
+    }
+
+    get lineIndex(){
+        if(this.needUpdateIndexes){
+            this.updateIndexes()
+        }
+
+        return this._lineIndex
     }
 
     onClose(callback) {
@@ -32,7 +90,6 @@ class Tab extends HTMLElement {
     }
 
     unfocus(){
-        this.instanceContent = contentHolder.innerHTML
         this.classList.remove("selected")
         contentHolder.innerHTML = ""
     }
@@ -63,19 +120,35 @@ class Tab extends HTMLElement {
 
     async loadContent(){
         if(this.highlightedLines === null){
-            this.highlightedLines = await highlightCode(this._getData(), convertExtensionToName(this.fileName.split(".")[1]));
+            let rawData = this._getData();
+            this.highlightedLines = await highlightCode(rawData, convertExtensionToName(this.fileName.split(".")[1]));
+
+            this.lineLengths = []
+            let lines = rawData.split("\n")
+            for(let i = 0; i < lines.length; i++){
+                this.lineLengths[i] = lines[i].length
+            }
         }
-    
-        if(this.instanceContent === null || this.instanceContent === "" || this.instanceContent === " ") {
-            this.instanceContent = this.highlightedLines
-                .map((line, index) => {
-                    const lineNumber = index + 1; 
-    
-                    return `<div class="code-line ${lineNumber == 1 ? "selected" : ""}" data-line="${lineNumber}"><div class="color"></div><div class="gray">${line || ' '}</div></div>`;
-                })
-                .join('');
+
+        contentHolder.innerHTML = this.highlightedLines
+            .map((line, index) => {
+                const lineNumber = index + 1; 
+
+                if(this.lineIndex > index){
+                    return `<div class="code-line ${index == this.lineIndex ? "selected" : ""}" data-line="${lineNumber}"><div class="color">${line || ' '}</div><div class="gray"></div></div>`;
+                }
+
+                return `<div class="code-line ${index == this.lineIndex ? "selected" : ""}" data-line="${lineNumber}"><div class="color"></div><div class="gray">${line || ' '}</div></div>`;
+            })
+            .join('');
+
+        // There's room to optimization
+        let line = contentHolder.children[this.lineIndex];
+        let color = line.children[0]
+        let gray = line.children[1]
+        for(let i = 0; i < this.charIndex; i++){
+            moveFirstChar(gray, color)
         }
-        contentHolder.innerHTML = this.instanceContent
     }
 
     connectedCallback(){

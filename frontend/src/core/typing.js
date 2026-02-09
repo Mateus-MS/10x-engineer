@@ -25,14 +25,11 @@ window.addEventListener("keydown", (e) => {
   if(openTab.charIndex >= lineLength){
       contentHolder.children[openTab.lineIndex].classList.remove("selected")
       
-      openTab.lineIndex += 1;
-      contentHolder.children[openTab.lineIndex].classList.add("selected")
-
-      openTab.charIndex = 0;
+      contentHolder.children[openTab.lineIndex + 1].classList.add("selected")
       return
   }
 
-  openTab.charIndex += 1;
+  openTab.charCount += 1;
 });
 
 function keepLineAbovePercentage(parent, child, percent = 0.8, smooth = true) {
