@@ -1,7 +1,7 @@
 package main
 
 import (
-	routes "Mateus-MS/10x-engineer/backend/routes"
+	routes "github.com/Mateus-MS/10x-engineer/backend/routes"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,0 +1,72 @@
+package frontend
+
+import (
+    utils "github.com/Mateus-MS/10x-engineer/backend/utils"
+)
+
+templ FolderNode(folder *utils.Folder) {
+    <div-collapsable title={ folder.Name }>
+
+        <!-- Subfolders -->
+        for _, sub := range folder.Subfolders {
+            @FolderNode(sub)
+        }
+
+        <!-- Files -->
+        for _, file := range folder.Files {
+            <div-file fileName={ file.Name } fullPath={ file.Path }></div-file>
+        }
+
+    </div-collapsable>
+}
+
+templ Index(fileTree *utils.Folder){
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The 10x engineer</title>
+        <base href="frontend/">
+
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/code.css">
+        <link rel="stylesheet" href="css/shake.css">
+        <link rel="stylesheet" href="css/side-menu/main.css">
+
+        // Custom elements
+        <script src="src/components/tab/tab.js" type="module"></script>
+        <script src="src/components/side-menu/side-menu.js" type="module"></script>
+        <script src="src/components/collapsable/collapsable.js" type="module"></script>
+
+        <script src="src/core/typing.js" type="module" defer></script>
+
+        // Thirdyparties
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="side-menu">
+                <div id="icons">
+                </div>
+                <div id="menus">
+                    <side-menu icon="&#xE805;" title="Levels">
+                        @FolderNode(fileTree)
+                    </side-menu>
+                </div>
+            </div>
+            <div id="main">
+                <div class="content code">
+                    <div id="nav-bar"></div>
+                    <div id="content"></div>
+                </div>
+            </div>
+            <div id="agent"></div>
+            <div id="cmd"></div>
+        </div>
+    </body>
+    </html>
+}
