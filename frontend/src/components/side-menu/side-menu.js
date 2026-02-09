@@ -1,9 +1,8 @@
 import { html } from './body.js';
-import { css } from './style.js';
 import { SideMenuIcon } from './icon/icon.js';
-import { File } from './file/file.js';
+import { css } from './style.js';
 
-const iconsContainer = document.getElementById("icons")
+const iconsContainer = document.getElementById("upper")
 if (!iconsContainer) throw new Error("Icons container not found")
 
 const sideMenuStyles = new CSSStyleSheet();
@@ -33,7 +32,9 @@ class SideMenu extends HTMLElement {
 
         this.iconElement = document.createElement('side-menu-icon');
         this.iconElement.setAttribute("icon", iconValue)
-        this.iconElement.setAttribute(iconsContainer.children.length === 0 ? "selected" : "", "")
+        if (iconsContainer.children.length === 0) {
+            this.iconElement.setAttribute("selected", "")
+        }
         
         iconsContainer.appendChild(this.iconElement)
 
@@ -55,7 +56,8 @@ class SideMenu extends HTMLElement {
     }
 }
 
+console.log("Side-menu-icon defined")
 customElements.define('side-menu-icon', SideMenuIcon);
-customElements.define('side-menu', SideMenu);
 
-customElements.define('div-file', File);
+console.log("Side-menu defined")
+customElements.define('side-menu', SideMenu);

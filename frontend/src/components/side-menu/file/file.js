@@ -62,3 +62,5 @@ export class File extends HTMLElement {
         })
     }
 }
+
+customElements.define('div-file', File);

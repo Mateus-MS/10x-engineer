@@ -1,15 +1,13 @@
-import { html } from "./body.js"
+import { SideIcon } from "../../side-icon/side-icon.js";
 import { css } from "./style.js"
 
 const iconStyles = new CSSStyleSheet();
 iconStyles.replaceSync(css());
 
-export class SideMenuIcon extends HTMLElement {
+export class SideMenuIcon extends SideIcon {
     constructor() {
         super();
-        this.attachShadow({ mode: "open" });
-        // Attach the shared stylesheet
-        this.shadowRoot.adoptedStyleSheets = [iconStyles];
+        this.shadowRoot.adoptedStyleSheets.push(iconStyles);
 
         this.addEventListener("click", ()=>{
             this.onclick()
@@ -33,9 +31,4 @@ export class SideMenuIcon extends HTMLElement {
         this.setAttribute('selected', '');
     }
 
-    render() {
-        const icon = this.getAttribute('icon') || '';
-        
-        this.shadowRoot.innerHTML = html(icon);
-    }
 }

@@ -35,9 +35,10 @@ templ Index(fileTree *utils.Folder){
         <link rel="stylesheet" href="css/side-menu/main.css">
 
         // Custom elements
-        <script src="src/components/tab/tab.js" type="module"></script>
-        <script src="src/components/side-menu/side-menu.js" type="module"></script>
-        <script src="src/components/collapsable/collapsable.js" type="module"></script>
+        <script src="src/components/tab/tab.js" type="module" defer></script>
+        <script src="src/components/side-icon/side-icon.js" type="module" defer></script>
+        <script src="src/components/side-menu/side-menu.js" type="module" defer></script>
+        <script src="src/components/collapsable/collapsable.js" type="module" defer></script>
 
         <script src="src/core/typing.js" type="module" defer></script>
 
@@ -51,6 +52,10 @@ templ Index(fileTree *utils.Folder){
         <div id="container">
             <div id="side-menu">
                 <div id="icons">
+                    <div id="upper"></div>
+                    <div id="bottom">
+                        <side-icon icon="&#xE803;"></side-icon>
+                    </div>
                 </div>
                 <div id="menus">
                     <side-menu icon="&#xE805;" title="Levels">
