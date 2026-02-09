@@ -1,36 +1,38 @@
 import { moveFirstChar } from "./utils/moveFirstChar.js";
 
+const tabHolder = document.getElementById("nav-bar")
+if (!tabHolder) throw new Error("tab holder not found")
+
 const contentHolder = document.getElementById("content")
 if (!contentHolder) throw new Error("content holder not found")
 
-let lineIndex = 0;
-let charIndex = 0;
-
 window.addEventListener("keydown", (e) => {
-    if (e.repeat) return;
+  if (e.repeat) return;
 
-    let line = contentHolder.children[lineIndex];
+  const openTab = tabHolder.querySelector(".selected")
 
-    let color = line.children[0]
-    let gray = line.children[1]
+  let line = contentHolder.children[openTab.lineIndex];
 
-    let lineLength = line.innerText.length;
+  let color = line.children[0]
+  let gray = line.children[1]
 
-    keepLineAbovePercentage(line.parentElement, line)
+  let lineLength = line.innerText.length;
 
-    moveFirstChar(gray, color)
+  keepLineAbovePercentage(line.parentElement, line)
 
-    if(charIndex >= lineLength){
-        contentHolder.children[lineIndex].classList.remove("selected")
-        
-        lineIndex += 1;
-        contentHolder.children[lineIndex].classList.add("selected")
+  moveFirstChar(gray, color)
 
-        charIndex = 0;
-        return
-    }
+  if(openTab.charIndex >= lineLength){
+      contentHolder.children[openTab.lineIndex].classList.remove("selected")
+      
+      openTab.lineIndex += 1;
+      contentHolder.children[openTab.lineIndex].classList.add("selected")
 
-    charIndex += 1;
+      openTab.charIndex = 0;
+      return
+  }
+
+  openTab.charIndex += 1;
 });
 
 function keepLineAbovePercentage(parent, child, percent = 0.8, smooth = true) {

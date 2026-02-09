@@ -44,8 +44,6 @@ export class File extends HTMLElement {
             this.data = await response.text();
         }
 
-
-
         tabHolder.appendChild(this.tabElement);
     }
 

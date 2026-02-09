@@ -18,24 +18,33 @@ class Tab extends HTMLElement {
         this.attachShadow({mode: "open"})
 
         this.highlightedLines = null;
+        this.instanceContent = null;
         this.shadowRoot.adoptedStyleSheets = [tabStyles];
 
         this._closeListeners = new Set();
+
+        this.charIndex = 0;
+        this.lineIndex = 0;
     }
 
     onClose(callback) {
         this._closeListeners.add(callback);
     }
 
+    unfocus(){
+        this.instanceContent = contentHolder.innerHTML
+        this.classList.remove("selected")
+        contentHolder.innerHTML = ""
+    }
+    
     focus(){
-        tabHolder.querySelectorAll(".selected").forEach(i => i.classList.remove('selected'));
+        tabHolder.querySelectorAll(".selected").forEach(i => i.unfocus());
         this.classList.add("selected")
-
+        
         this.loadContent()
     }
 
     close(e){
-        // Notify all 
         for (const file of this._closeListeners) file(this);
 
         if(this.classList.contains("selected")){
@@ -57,13 +66,16 @@ class Tab extends HTMLElement {
             this.highlightedLines = await highlightCode(this._getData(), convertExtensionToName(this.fileName.split(".")[1]));
         }
     
-        contentHolder.innerHTML = this.highlightedLines
-            .map((line, index) => {
-                const lineNumber = index + 1; 
-
-                return `<div class="code-line ${lineNumber == 1 ? "selected" : ""}" data-line="${lineNumber}"><div class="color"></div><div class="gray">${line || ' '}</div></div>`;
-            })
-            .join('');
+        if(this.instanceContent === null || this.instanceContent === "" || this.instanceContent === " ") {
+            this.instanceContent = this.highlightedLines
+                .map((line, index) => {
+                    const lineNumber = index + 1; 
+    
+                    return `<div class="code-line ${lineNumber == 1 ? "selected" : ""}" data-line="${lineNumber}"><div class="color"></div><div class="gray">${line || ' '}</div></div>`;
+                })
+                .join('');
+        }
+        contentHolder.innerHTML = this.instanceContent
     }
 
     connectedCallback(){
